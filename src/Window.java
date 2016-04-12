@@ -37,6 +37,7 @@ public class Window extends Application {
         Consumer<Pixel> pixelPainter = (pixel) -> pixelWriter.setColor(pixel.getX(),pixel.getY(),pixel.getColor());
         MandelbrotSet.paintMandelbrotSet(IMAGE_WIDTH, IMAGE_HEIGHT, pixelPainter);
     }
+    
     public static void main(String[] args) {
         new Window().launch();
     }

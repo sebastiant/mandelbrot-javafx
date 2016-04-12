@@ -14,15 +14,19 @@ public class MandelbrotSet {
                 double c_imaginary = (row - height / 2) * diameter / width;
                 double z = 0, y = 0;
                 int iterations = 0;
-                for (;Math.pow(z,2) + Math.pow(y,2) < 4 && iterations < max_iterations;iterations++) {
+                for (;Math.pow(z,2) + Math.pow(y,2) < diameter && iterations < max_iterations;iterations++) {
                     double z_new = Math.pow(z,2) - Math.pow(y,2) + c_real;
                     y = 2 * z * y + c_imaginary;
                     z = z_new;
                 }
-                Pixel pixel = inMandelbrotSet(iterations) ? new Pixel(column, row, Color.BLACK) : new Pixel(column, row, Color.rgb(iterations % 255, 0, 0));
-                colorPixel.accept(pixel);
+                colorPixel(colorPixel, row, column, iterations);
             }
         }
+    }
+
+    private static void colorPixel(Consumer<Pixel> colorPixel, int row, int column, int iterations) {
+        Pixel pixel = inMandelbrotSet(iterations) ? new Pixel(column, row, Color.BLACK) : new Pixel(column, row, Color.rgb(iterations % 255, 0, 0));
+        colorPixel.accept(pixel);
     }
 
     private static boolean inMandelbrotSet(int iterations) {
