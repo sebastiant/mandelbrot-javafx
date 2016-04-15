@@ -7,19 +7,26 @@ public class MandelbrotSet {
     final static double diameter = 4.0;
 
     public static void paintMandelbrotSet(int width, int height, Consumer<Pixel> colorPixel) {
+        double minReal = -2.0;
+        double maxReal = 1.0;
+        double minImaginary = -1.2;
+        double maxImaginary = minImaginary + (maxReal - minReal) * height / width;
 
-        for (int row = 0; row < height; row++) {
-            for (int column = 0; column < width; column++) {
-                double c_real = (column - width / 2) * diameter / width;
-                double c_imaginary = (row - height / 2) * diameter / width;
-                double z = 0, y = 0;
+        double x_factor = (maxReal - minReal) / (width - 1);
+        double y_factor = (maxImaginary - minImaginary) / (height - 1);
+
+        for (int x = 0; x < width; x++) {
+            double c_real = minReal + x * x_factor;
+            for (int y = 0; y < height; y++) {
+                double c_imaginary = maxImaginary - y * y_factor;
+                double z_real = c_real, z_imaginary = c_imaginary;
                 int iterations = 0;
-                for (;Math.pow(z,2) + Math.pow(y,2) < diameter && iterations < max_iterations;iterations++) {
-                    double z_new = Math.pow(z,2) - Math.pow(y,2) + c_real;
-                    y = 2 * z * y + c_imaginary;
-                    z = z_new;
+                for (;Math.pow(z_real,2) + Math.pow(z_imaginary,2) < diameter && iterations < max_iterations;iterations++) {
+                    double z_real_new = Math.pow(z_real,2) - Math.pow(z_imaginary,2) + c_real;
+                    z_imaginary = 2 * z_real * z_imaginary + c_imaginary;
+                    z_real = z_real_new;
                 }
-                colorPixel(colorPixel, row, column, iterations);
+                colorPixel(colorPixel, y, x, iterations);
             }
         }
     }
